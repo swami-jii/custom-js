@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // 🔁 1. Carousel Auto Slide + Button Scroll
     const wrapper = document.querySelector(".carousel-wrapper");
     const nextBtn = document.querySelector(".carousel-btn.right");
     const prevBtn = document.querySelector(".carousel-btn.left");
     const cards = document.querySelectorAll(".carousel-card");
-    let cardWidth = 300;
+    let cardWidth = cards[0]?.offsetWidth + 16 || 300;
     let autoScroll, autoScrollTimeout;
 
     function isMobile() {
@@ -11,29 +12,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateCardWidth() {
-        const firstCard = document.querySelector(".carousel-card");
-        if (firstCard) {
-            cardWidth = firstCard.offsetWidth + 16;
-        }
+        cardWidth = cards[0]?.offsetWidth + 16 || 300;
     }
 
     function startAutoScroll() {
-        if (isMobile()) return;
+    if (isMobile()) return; // Mobile par auto-slide off
 
-        const wrapper = document.querySelector('.elementor-element.elementor-element-f5980e0.e-grid.e-con-full.carousel-wrapper');
-        if (!wrapper) return;
+    const wrapper = document.querySelector('.elementor-element.elementor-element-f5980e0.e-grid.e-con-full.carousel-wrapper'); // ✅ Sahi class
+    if (!wrapper) return; // Agar wrapper nahi mila to scroll band
 
-        const cardWidth = 250;
-        autoScroll = setInterval(() => {
-            wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
+    const cardWidth = 250; // 🧠 Yahan aap apne card ka exact width daal sakte ho
+    autoScroll = setInterval(() => {
+        wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
 
-            if (wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - cardWidth) {
-                setTimeout(() => {
-                    wrapper.scrollTo({ left: 0, behavior: "auto" });
-                }, 500);
-            }
-        }, 2000);
-    }
+        if (wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - cardWidth) {
+            setTimeout(() => {
+                wrapper.scrollTo({ left: 0, behavior: "auto" });
+            }, 500);
+        }
+    }, 2000);
+}
 
     function stopAutoScroll() {
         clearInterval(autoScroll);
@@ -58,22 +56,19 @@ document.addEventListener("DOMContentLoaded", function () {
         restartAutoScroll();
     });
 
+    if (!isMobile()) startAutoScroll();
+
     wrapper?.addEventListener("mouseenter", stopAutoScroll);
     wrapper?.addEventListener("mouseleave", restartAutoScroll);
-
     window.addEventListener("resize", function () {
         updateCardWidth();
         stopAutoScroll();
         if (!isMobile()) startAutoScroll();
     });
 
-    // 🛠 Delay update to allow full rendering
-    setTimeout(() => {
-        updateCardWidth();
-        if (!isMobile()) startAutoScroll();
-    }, 300); // 300ms delay can be adjusted
+    updateCardWidth();
 
-    // 🧾 See All Button Toggle
+    // 🧾 2. See All Button Toggle
     const seeAllBtn = document.getElementById("seeAllBtn");
     let isExpanded = false;
 
@@ -83,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         seeAllBtn.innerText = isExpanded ? "See Less" : "See All";
     });
 
-    // 🏷️ Category Title Update on Card Click
+    // 🏷️ 3. Category Title Update on Card Click
     let shopTitle = document.querySelector(".elementor-divider__text");
     document.querySelectorAll(".carousel-card").forEach(card => {
         card.addEventListener("click", function () {
@@ -93,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
-});
 
     // 🔽 4. Custom Sorting Dropdown for WooCommerce
     function initCustomDropdown() {
