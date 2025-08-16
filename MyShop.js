@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function restartAutoScroll() {
         if (isMobile()) return;
         stopAutoScroll();
-        autoScrollTimeout = setTimeout(startAutoScroll, 3000);
+        autoScrollTimeout = setTimeout(startAutoScroll, 1000);
     }
     nextBtn?.addEventListener("click", function () {
         stopAutoScroll();
