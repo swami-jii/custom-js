@@ -37,13 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
         clearInterval(autoScroll);
         clearTimeout(autoScrollTimeout);
     }
-
     function restartAutoScroll() {
         if (isMobile()) return;
         stopAutoScroll();
         autoScrollTimeout = setTimeout(startAutoScroll, 3000);
     }
-
     nextBtn?.addEventListener("click", function () {
         stopAutoScroll();
         wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
@@ -65,9 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
         stopAutoScroll();
         if (!isMobile()) startAutoScroll();
     });
-
     updateCardWidth();
-
     // 🧾 2. See All Button Toggle
     const seeAllBtn = document.getElementById("seeAllBtn");
     let isExpanded = false;
@@ -77,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
         wrapper?.classList.toggle("expanded", isExpanded);
         seeAllBtn.innerText = isExpanded ? "See Less" : "See All";
     });
-
     // 🏷️ 3. Category Title Update on Card Click
     let shopTitle = document.querySelector(".elementor-divider__text");
     document.querySelectorAll(".carousel-card").forEach(card => {
