@@ -449,6 +449,7 @@ li.product.hidden-product {
 .carousel-wrapper {
     display: flex;
     overflow-x: auto;
+	align-items: stretch; /* Cards ko same height enforce kare */
     scroll-behavior: smooth;
     white-space: nowrap;
     scrollbar-width: none;
@@ -465,6 +466,7 @@ li.product.hidden-product {
 .carousel-card {
     flex: 0 0 auto;
     width: 131px;
+	height: 100%; /* Ensure equal height */
     transition: transform 0.3s ease-in-out;
 }
 
