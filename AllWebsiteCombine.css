@@ -466,6 +466,7 @@ li.product.hidden-product {
 .carousel-card {
     flex: 0 0 auto; 
 	width: 131px; 
+	hight: 180px;
 	transition: transform 0.3s ease-in-out;
 }
 
