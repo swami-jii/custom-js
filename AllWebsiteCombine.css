@@ -464,15 +464,9 @@ li.product.hidden-product {
 }
 
 .carousel-card {
-    flex: 0 0 auto;
-    width: 131px;
-	height: 70px; /* 🔥 ek fixed ya min-height rakho */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    transition: transform 0.3s ease-in-out;
-    box-sizing: border-box;
+    flex: 0 0 auto; 
+	width: 131px; 
+	transition: transform 0.3s ease-in-out;
 }
 
 .carousel-card.active {
@@ -495,7 +489,6 @@ li.product.hidden-product {
   .carousel-wrapper.expanded .carousel-card {
     flex: 1 1 calc(33.33% - 12px); /* 3 cards per row */
     margin-bottom: 15px;
-	height: 50px; /* 🔥 ek fixed ya min-height rakho */
   }
 }
 
