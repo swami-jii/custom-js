@@ -466,7 +466,6 @@ li.product.hidden-product {
 .carousel-card {
     flex: 0 0 auto;
     width: 131px;
-    height: 180px; /* 🔥 ek fixed ya min-height rakho */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
