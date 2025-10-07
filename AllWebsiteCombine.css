@@ -449,7 +449,6 @@ li.product.hidden-product {
 .carousel-wrapper {
     display: flex;
     overflow-x: auto;
-	align-items: stretch; /* Cards ko same height enforce kare */
     scroll-behavior: smooth;
     white-space: nowrap;
     scrollbar-width: none;
@@ -464,15 +463,9 @@ li.product.hidden-product {
 }
 
 .carousel-card {
-    flex: 0 0 auto;
-    width: 131px;
-    height: 180px; /* 🔥 ek fixed ya min-height rakho */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    transition: transform 0.3s ease-in-out;
-    box-sizing: border-box;
+    flex: 0 0 auto; 
+	width: 131px; 
+	transition: transform 0.3s ease-in-out;
 }
 
 .carousel-card.active {
