@@ -466,6 +466,7 @@ li.product.hidden-product {
 .carousel-card {
     flex: 0 0 auto;
     width: 131px;
+	height: 180px; /* 🔥 ek fixed ya min-height rakho */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -494,6 +495,7 @@ li.product.hidden-product {
   .carousel-wrapper.expanded .carousel-card {
     flex: 1 1 calc(33.33% - 12px); /* 3 cards per row */
     margin-bottom: 15px;
+	height: 100px; /* 🔥 ek fixed ya min-height rakho */
   }
 }
 
