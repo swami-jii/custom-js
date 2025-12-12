@@ -97,3 +97,137 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+ // 🔽 4. Custom Sorting Dropdown for WooCommerce
+    function initCustomDropdown() {
+        const checkExist = setInterval(() => {
+            const originalSelect = document.querySelector(".woocommerce-ordering select");
+            if (originalSelect) {
+                clearInterval(checkExist);
+                if (!document.querySelector(".custom-dropdown")) {
+                    const dropdownContainer = document.createElement("div");
+                    dropdownContainer.className = "custom-dropdown";
+
+                    const selectedBox = document.createElement("div");
+                    selectedBox.className = "selected";
+                    selectedBox.textContent = originalSelect.options[originalSelect.selectedIndex].text;
+
+                    const optionsBox = document.createElement("div");
+                    optionsBox.className = "dropdown-options";
+
+                    [...originalSelect.options].forEach((option, index) => {
+                        const optionDiv = document.createElement("div");
+                        optionDiv.textContent = option.text;
+                        optionDiv.dataset.value = option.value;
+                        if (index === originalSelect.selectedIndex) optionDiv.classList.add("active");
+
+                        optionDiv.addEventListener("click", () => {
+                            selectedBox.textContent = option.text;
+                            originalSelect.value = option.value;
+                            optionsBox.querySelectorAll("div").forEach(div => div.classList.remove("active"));
+                            optionDiv.classList.add("active");
+                            optionsBox.style.display = "none";
+                            originalSelect.dispatchEvent(new Event("change"));
+                        });
+
+                        optionsBox.appendChild(optionDiv);
+                    });
+
+                    dropdownContainer.append(selectedBox, optionsBox);
+                    originalSelect.parentNode.insertBefore(dropdownContainer, originalSelect);
+                    dropdownContainer.style.visibility = "visible";
+                    dropdownContainer.style.opacity = "1";
+
+                    selectedBox.addEventListener("click", () => {
+                        optionsBox.style.display = optionsBox.style.display === "block" ? "none" : "block";
+                    });
+
+                    document.addEventListener("click", event => {
+                        if (!dropdownContainer.contains(event.target)) optionsBox.style.display = "none";
+                    });
+                }
+            }
+        }, 50);
+    }
+
+    initCustomDropdown();
+    setTimeout(initCustomDropdown, 10);
+
+    // 🛍️ 5. Show All Products Button
+    let resultCount = document.querySelector(".woocommerce-result-count");
+    let productContainer = document.querySelector(".products");
+    let allProducts = productContainer ? Array.from(productContainer.children) : [];
+
+    function addShowAllButton() {
+        if (document.querySelector(".custom-show-all-btn") || !resultCount || !productContainer) return;
+
+        let showAllBtn = document.createElement("button");
+        showAllBtn.textContent = "Show All Products";
+        showAllBtn.classList.add("custom-show-all-btn");
+        resultCount.parentNode.insertBefore(showAllBtn, resultCount);
+
+        showAllBtn.addEventListener("click", function () {
+            productContainer.innerHTML = "";
+            allProducts.forEach(product => productContainer.appendChild(product));
+            resultCount.textContent = `Showing all ${allProducts.length} products`;
+            if (shopTitle) shopTitle.textContent = "My Shop";
+        });
+    }
+
+    new MutationObserver(() => addShowAllButton()).observe(document.body, { childList: true, subtree: true });
+
+    // ⚡ 6. AJAX Filter on Category Card Click
+    let cache = {};
+    let xhr;
+    let debounceTimeout;
+
+    function updateProducts(htmlContent, category) {
+    if (!productContainer) return; // Agar container hi nahi mila to kuch mat karo
+
+    productContainer.innerHTML = htmlContent.trim() || '<div class="filter-no-products-message">No products available in this category.</div>';
+    cache[category] = htmlContent;
+    updateCategoryCount();
+}
+
+    function filterProducts(category = "") {
+        if (cache[category]) return updateProducts(cache[category], category);
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            if (xhr) xhr.abort();
+            xhr = new XMLHttpRequest();
+            let url = `${window.location.origin}${window.location.pathname}${category ? "?product_cat=" + category : ""}`;
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let parser = new DOMParser();
+                    let newDoc = parser.parseFromString(xhr.responseText, "text/html");
+                    let newProducts = newDoc.querySelector(".products");
+                    updateProducts(newProducts?.innerHTML || "", category);
+                }
+            };
+            xhr.send();
+        }, 100);
+    }
+
+    setTimeout(() => filterProducts(), 10);
+    document.querySelectorAll(".carousel-card").forEach(card => {
+        card.addEventListener("click", function () {
+            document.querySelectorAll(".carousel-card").forEach(c => c.classList.remove("active"));
+            this.classList.add("active");
+            filterProducts(this.id);
+        });
+    });
+
+    function updateCategoryCount() {
+        let visibleProducts = document.querySelectorAll(".elementor-widget-wc-archive-products .product:not([style*='display: none'])");
+        let totalCount = visibleProducts.length;
+        let resultCountElement = document.querySelector(".woocommerce-result-count");
+        if (resultCountElement) {
+            resultCountElement.textContent = `Showing ${totalCount} results`;
+        }
+    }
+
+    const productList = document.querySelector(".elementor-widget-wc-archive-products ul.products");
+    if (productList) {
+        new MutationObserver(() => updateCategoryCount()).observe(productList, { childList: true, subtree: true, attributes: true });
+    }
+});
