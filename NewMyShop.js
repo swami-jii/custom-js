@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-    // 📌 1. Get main carousel wrapper
+    // 🔁 1. Carousel Auto Slide + Button Scroll
     const wrapper = document.querySelector(".carousel-wrapper");
     const nextBtn = document.querySelector(".carousel-btn.right");
     const prevBtn = document.querySelector(".carousel-btn.left");
     const cards = document.querySelectorAll(".carousel-card");
-
     let cardWidth = cards[0]?.offsetWidth + 16 || 300;
     let autoScroll, autoScrollTimeout;
 
@@ -17,18 +15,24 @@ document.addEventListener("DOMContentLoaded", function () {
         cardWidth = cards[0]?.offsetWidth + 16 || 300;
     }
 
-    // ⭐ FIXED AUTOPLAY FUNCTION (NO duplicate wrapper)
     function startAutoScroll() {
-        if (isMobile()) return;
-        if (!wrapper) return;
+        if (isMobile()) return; // Mobile par auto-slide off
+
+        // ⛔ OLD (Removed because it breaks Elementor)
+        // const wrapper = document.querySelector('.elementor-element.elementor-element-f5980e0.e-grid.e-con-full.carousel-wrapper');
+
+        // ✅ NEW SAFE SELECTOR (Same wrapper used above)
+        const wrapperLocal = document.querySelector(".carousel-wrapper");
+        if (!wrapperLocal) return;
+
+        const cardWidthLocal = 250; // Aapka original value
 
         autoScroll = setInterval(() => {
-            wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
+            wrapperLocal.scrollBy({ left: cardWidthLocal, behavior: "smooth" });
 
-            // Loop back
-            if (wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - cardWidth) {
+            if (wrapperLocal.scrollLeft + wrapperLocal.clientWidth >= wrapperLocal.scrollWidth - cardWidthLocal) {
                 setTimeout(() => {
-                    wrapper.scrollTo({ left: 0, behavior: "auto" });
+                    wrapperLocal.scrollTo({ left: 0, behavior: "auto" });
                 }, 500);
             }
         }, 2000);
@@ -45,28 +49,24 @@ document.addEventListener("DOMContentLoaded", function () {
         autoScrollTimeout = setTimeout(startAutoScroll, 1000);
     }
 
-    // ⭐ Buttons working on desktop
-    nextBtn?.addEventListener("click", () => {
+    nextBtn?.addEventListener("click", function () {
         stopAutoScroll();
         wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
         restartAutoScroll();
     });
 
-    prevBtn?.addEventListener("click", () => {
+    prevBtn?.addEventListener("click", function () {
         stopAutoScroll();
         wrapper.scrollBy({ left: -cardWidth, behavior: "smooth" });
         restartAutoScroll();
     });
 
-    // Start autoplay only on desktop
     if (!isMobile()) startAutoScroll();
 
-    // Pause on hover
     wrapper?.addEventListener("mouseenter", stopAutoScroll);
     wrapper?.addEventListener("mouseleave", restartAutoScroll);
 
-    // On resize update card width
-    window.addEventListener("resize", () => {
+    window.addEventListener("resize", function () {
         updateCardWidth();
         stopAutoScroll();
         if (!isMobile()) startAutoScroll();
@@ -74,21 +74,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateCardWidth();
 
-
-    // 🎯 2. See All Button
+    // 🧾 2. See All Button Toggle
     const seeAllBtn = document.getElementById("seeAllBtn");
     let isExpanded = false;
 
-    seeAllBtn?.addEventListener("click", () => {
+    seeAllBtn?.addEventListener("click", function () {
         isExpanded = !isExpanded;
         wrapper?.classList.toggle("expanded", isExpanded);
         seeAllBtn.innerText = isExpanded ? "See Less" : "See All";
     });
 
-    // 🎯 3. Update category title when card clicked
+    // 🏷️ 3. Category Title Update on Card Click
     let shopTitle = document.querySelector(".elementor-divider__text");
     document.querySelectorAll(".carousel-card").forEach(card => {
-        card.addEventListener("click", () => {
+        card.addEventListener("click", function () {
             let caption = card.querySelector(".elementor-image-box-description, .elementor-image-caption, figcaption");
             if (caption?.innerText.trim()) {
                 shopTitle.textContent = caption.innerText.trim();
