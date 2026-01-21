@@ -84,61 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 🔽 4. Custom Sorting Dropdown for WooCommerce
-    function initCustomDropdown() {
-        const checkExist = setInterval(() => {
-            const originalSelect = document.querySelector(".woocommerce-ordering select");
-            if (originalSelect) {
-                clearInterval(checkExist);
-                if (!document.querySelector(".custom-dropdown")) {
-                    const dropdownContainer = document.createElement("div");
-                    dropdownContainer.className = "custom-dropdown";
-
-                    const selectedBox = document.createElement("div");
-                    selectedBox.className = "selected";
-                    selectedBox.textContent = originalSelect.options[originalSelect.selectedIndex].text;
-
-                    const optionsBox = document.createElement("div");
-                    optionsBox.className = "dropdown-options";
-
-                    [...originalSelect.options].forEach((option, index) => {
-                        const optionDiv = document.createElement("div");
-                        optionDiv.textContent = option.text;
-                        optionDiv.dataset.value = option.value;
-                        if (index === originalSelect.selectedIndex) optionDiv.classList.add("active");
-
-                        optionDiv.addEventListener("click", () => {
-                            selectedBox.textContent = option.text;
-                            originalSelect.value = option.value;
-                            optionsBox.querySelectorAll("div").forEach(div => div.classList.remove("active"));
-                            optionDiv.classList.add("active");
-                            optionsBox.style.display = "none";
-                            originalSelect.dispatchEvent(new Event("change"));
-                        });
-
-                        optionsBox.appendChild(optionDiv);
-                    });
-
-                    dropdownContainer.append(selectedBox, optionsBox);
-                    originalSelect.parentNode.insertBefore(dropdownContainer, originalSelect);
-                    dropdownContainer.style.visibility = "visible";
-                    dropdownContainer.style.opacity = "1";
-
-                    selectedBox.addEventListener("click", () => {
-                        optionsBox.style.display = optionsBox.style.display === "block" ? "none" : "block";
-                    });
-
-                    document.addEventListener("click", event => {
-                        if (!dropdownContainer.contains(event.target)) optionsBox.style.display = "none";
-                    });
-                }
-            }
-        }, 50);
-    }
-
-    initCustomDropdown();
-    setTimeout(initCustomDropdown, 10);
-
     // 🛍️ 5. Show All Products Button
     let resultCount = document.querySelector(".woocommerce-result-count");
     let productContainer = document.querySelector(".products");
