@@ -83,3 +83,59 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+    
+document.addEventListener("DOMContentLoaded", function () {
+
+  const productWrap = document.querySelector(
+    ".elementor-widget-wc-archive-products .products"
+  );
+  if (!productWrap) return;
+
+  let xhr;
+  let cache = {};
+
+  function loadCategory(cat) {
+    if (cache[cat]) {
+      productWrap.innerHTML = cache[cat];
+      return;
+    }
+
+    if (xhr) xhr.abort();
+    xhr = new XMLHttpRequest();
+
+    const url =
+      window.location.pathname +
+      (cat ? "?product_cat=" + cat : "");
+
+    xhr.open("GET", url, true);
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        const doc = new DOMParser().parseFromString(
+          xhr.responseText,
+          "text/html"
+        );
+        const newProducts = doc.querySelector(".products");
+        if (newProducts) {
+          cache[cat] = newProducts.innerHTML;
+          productWrap.innerHTML = newProducts.innerHTML;
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  // 🔥 CARD CLICK → FILTER
+  document.querySelectorAll(".carousel-card").forEach(card => {
+    card.addEventListener("click", function () {
+
+      document
+        .querySelectorAll(".carousel-card")
+        .forEach(c => c.classList.remove("active"));
+      this.classList.add("active");
+
+      const cat = this.dataset.cat || "";
+      loadCategory(cat);
+    });
+  });
+
+});
