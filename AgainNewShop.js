@@ -1,186 +1,84 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-/* =====================================================
-   🔁 1. CAROUSEL (UNCHANGED)
-===================================================== */
-const wrapper = document.querySelector(".carousel-wrapper");
-const nextBtn = document.querySelector(".carousel-btn.right");
-const prevBtn = document.querySelector(".carousel-btn.left");
-const cards = document.querySelectorAll(".carousel-card");
+    /* ================================
+       1. BASIC SELECTORS (ORIGINAL)
+    ================================= */
+    const wrapper = document.querySelector(".carousel-wrapper");
+    const nextBtn = document.querySelector(".carousel-btn.right");
+    const prevBtn = document.querySelector(".carousel-btn.left");
+    const seeAllBtn = document.getElementById("seeAllBtn");
 
-let cardWidth = cards[0]?.offsetWidth + 16 || 300;
-let autoScroll, autoScrollTimeout;
+    if (!wrapper) return;
 
-const isMobile = () => window.innerWidth <= 768;
+    /* ================================
+       2. CARD WIDTH
+    ================================= */
+    let cardWidth = wrapper.querySelector(".carousel-card")?.offsetWidth + 16 || 250;
 
-function updateCardWidth() {
-    cardWidth = cards[0]?.offsetWidth + 16 || 300;
-}
+    function updateCardWidth() {
+        cardWidth = wrapper.querySelector(".carousel-card")?.offsetWidth + 16 || 250;
+    }
 
-function startAutoScroll() {
-    if (isMobile()) return;
-
-    const wrapperEl = document.querySelector('.carousel-wrapper');
-    if (!wrapperEl) return;
-
-    const w = 250;
-    autoScroll = setInterval(() => {
-        wrapperEl.scrollBy({ left: w, behavior: "smooth" });
-        if (wrapperEl.scrollLeft + wrapperEl.clientWidth >= wrapperEl.scrollWidth - w) {
-            setTimeout(() => wrapperEl.scrollTo({ left: 0, behavior: "auto" }), 500);
-        }
-    }, 2000);
-}
-
-function stopAutoScroll() {
-    clearInterval(autoScroll);
-    clearTimeout(autoScrollTimeout);
-}
-
-function restartAutoScroll() {
-    if (isMobile()) return;
-    stopAutoScroll();
-    autoScrollTimeout = setTimeout(startAutoScroll, 1000);
-}
-
-nextBtn?.addEventListener("click", () => {
-    stopAutoScroll();
-    wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
-    restartAutoScroll();
-});
-
-prevBtn?.addEventListener("click", () => {
-    stopAutoScroll();
-    wrapper.scrollBy({ left: -cardWidth, behavior: "smooth" });
-    restartAutoScroll();
-});
-
-wrapper?.addEventListener("mouseenter", stopAutoScroll);
-wrapper?.addEventListener("mouseleave", restartAutoScroll);
-
-if (!isMobile()) startAutoScroll();
-window.addEventListener("resize", () => {
-    updateCardWidth();
-    stopAutoScroll();
-    if (!isMobile()) startAutoScroll();
-});
-
-/* =====================================================
-   🧾 2. SHOW ALL / LESS (UNCHANGED)
-===================================================== */
-const seeAllBtn = document.getElementById("seeAllBtn");
-let expanded = false;
-
-seeAllBtn?.addEventListener("click", () => {
-    expanded = !expanded;
-    wrapper?.classList.toggle("expanded", expanded);
-    seeAllBtn.innerText = expanded ? "See Less" : "See All";
-});
-
-/* =====================================================
-   🏷️ 3. DIVIDER TITLE (UNCHANGED)
-===================================================== */
-const shopTitle = document.querySelector(".elementor-divider__text");
-
-/* =====================================================
-   🛒 🔧 PATCH 1: SAFE PRODUCT CONTAINER
-===================================================== */
-function getProductContainer() {
-    return document.querySelector(".custom-loop-products .products")
-        || document.querySelector(".products");
-}
-
-/* =====================================================
-   🛍️ 5. SHOW ALL PRODUCTS (PATCHED)
-===================================================== */
-let resultCount = document.querySelector(".woocommerce-result-count");
-let allProducts = [];
-
-function refreshAllProducts() {
-    const container = getProductContainer();
-    if (container) allProducts = Array.from(container.children);
-}
-
-refreshAllProducts();
-
-function addShowAllButton() {
-    if (document.querySelector(".custom-show-all-btn")) return;
-    if (!resultCount) return;
-
-    const btn = document.createElement("button");
-    btn.textContent = "Show All Products";
-    btn.className = "custom-show-all-btn";
-    resultCount.parentNode.insertBefore(btn, resultCount);
-
-    btn.addEventListener("click", () => {
-        const container = getProductContainer();
-        if (!container) return;
-
-        refreshAllProducts();
-        container.innerHTML = "";
-        allProducts.forEach(p => container.appendChild(p));
-
-        resultCount.textContent = `Showing all ${allProducts.length} products`;
-        if (shopTitle) shopTitle.textContent = "My Shop";
+    /* ================================
+       3. SMOOTH SCROLL BUTTONS
+    ================================= */
+    nextBtn?.addEventListener("click", function () {
+        wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
     });
-}
 
-new MutationObserver(addShowAllButton)
-.observe(document.body, { childList: true, subtree: true });
+    prevBtn?.addEventListener("click", function () {
+        wrapper.scrollBy({ left: -cardWidth, behavior: "smooth" });
+    });
 
-/* =====================================================
-   ⚡ 6. AJAX FILTER (ORIGINAL + SAFE)
-===================================================== */
-let cache = {};
-let xhr, debounce;
+    /* ================================
+       4. AUTO SCROLL (DESKTOP ONLY)
+    ================================= */
+    let autoScroll;
 
-function updateProducts(html, cat) {
-    const container = getProductContainer();
-    if (!container) return;
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
 
-    container.innerHTML = html || '<div>No products available</div>';
-    cache[cat] = html;
-    refreshAllProducts();
-}
+    function startAutoScroll() {
+        if (isMobile()) return;
 
-function filterProducts(category = "") {
-    if (cache[category]) return updateProducts(cache[category], category);
+        autoScroll = setInterval(() => {
+            wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
 
-    clearTimeout(debounce);
-    debounce = setTimeout(() => {
-        if (xhr) xhr.abort();
-        xhr = new XMLHttpRequest();
+            if (wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - cardWidth) {
+                setTimeout(() => {
+                    wrapper.scrollTo({ left: 0, behavior: "auto" });
+                }, 400);
+            }
+        }, 2000);
+    }
 
-        const url = `${location.origin}${location.pathname}${category ? "?product_cat=" + category : ""}`;
-        xhr.open("GET", url, true);
+    function stopAutoScroll() {
+        clearInterval(autoScroll);
+    }
 
-        xhr.onload = () => {
-            const doc = new DOMParser().parseFromString(xhr.responseText, "text/html");
-            const products = doc.querySelector(".products");
-            updateProducts(products?.innerHTML || "", category);
-        };
-        xhr.send();
-    }, 100);
-}
+    if (!isMobile()) startAutoScroll();
 
-setTimeout(() => filterProducts(), 10);
+    wrapper.addEventListener("mouseenter", stopAutoScroll);
+    wrapper.addEventListener("mouseleave", startAutoScroll);
 
-/* =====================================================
-   🎯 🔧 PATCH 2: CARD CLICK (EVENT DELEGATION)
-===================================================== */
-document.addEventListener("click", function (e) {
-    const card = e.target.closest(".carousel-card");
-    if (!card) return;
+    window.addEventListener("resize", function () {
+        stopAutoScroll();
+        updateCardWidth();
+        if (!isMobile()) startAutoScroll();
+    });
 
-    document.querySelectorAll(".carousel-card").forEach(c => c.classList.remove("active"));
-    card.classList.add("active");
+    /* ================================
+       5. SHOW ALL / SHOW LESS
+    ================================= */
+    let expanded = false;
 
-    filterProducts(card.id);
-
-    const caption = card.querySelector(".elementor-image-box-description, figcaption, .elementor-image-caption");
-    if (caption && shopTitle) shopTitle.textContent = caption.innerText.trim();
-});
+    seeAllBtn?.addEventListener("click", function () {
+        expanded = !expanded;
+        wrapper.classList.toggle("expanded", expanded);
+        seeAllBtn.innerText = expanded ? "See Less" : "See All";
+    });
 
 });
 </script>
