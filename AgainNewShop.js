@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 /* =====================================================
-   🔁 1. CAROUSEL GRID (AUTO + LEFT RIGHT)
+   🔁 1. CAROUSEL (UNCHANGED)
 ===================================================== */
 const wrapper = document.querySelector(".carousel-wrapper");
 const nextBtn = document.querySelector(".carousel-btn.right");
@@ -19,13 +19,16 @@ function updateCardWidth() {
 }
 
 function startAutoScroll() {
-    if (isMobile() || !wrapper) return;
+    if (isMobile()) return;
 
+    const wrapperEl = document.querySelector('.carousel-wrapper');
+    if (!wrapperEl) return;
+
+    const w = 250;
     autoScroll = setInterval(() => {
-        wrapper.scrollBy({ left: 250, behavior: "smooth" });
-
-        if (wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 250) {
-            setTimeout(() => wrapper.scrollTo({ left: 0, behavior: "auto" }), 500);
+        wrapperEl.scrollBy({ left: w, behavior: "smooth" });
+        if (wrapperEl.scrollLeft + wrapperEl.clientWidth >= wrapperEl.scrollWidth - w) {
+            setTimeout(() => wrapperEl.scrollTo({ left: 0, behavior: "auto" }), 500);
         }
     }, 2000);
 }
@@ -64,7 +67,7 @@ window.addEventListener("resize", () => {
 });
 
 /* =====================================================
-   🧾 2. SHOW ALL / SHOW LESS (GRID EXPAND)
+   🧾 2. SHOW ALL / LESS (UNCHANGED)
 ===================================================== */
 const seeAllBtn = document.getElementById("seeAllBtn");
 let expanded = false;
@@ -76,20 +79,58 @@ seeAllBtn?.addEventListener("click", () => {
 });
 
 /* =====================================================
-   🏷️ 3. DIVIDER TITLE
+   🏷️ 3. DIVIDER TITLE (UNCHANGED)
 ===================================================== */
 const shopTitle = document.querySelector(".elementor-divider__text");
 
 /* =====================================================
-   🛒 LOOP WIDGET SAFE PRODUCT SELECTOR
+   🛒 🔧 PATCH 1: SAFE PRODUCT CONTAINER
 ===================================================== */
 function getProductContainer() {
     return document.querySelector(".custom-loop-products .products")
-        || document.querySelector(".custom-loop-products");
+        || document.querySelector(".products");
 }
 
 /* =====================================================
-   ⚡ 4. AJAX CATEGORY FILTER (ORIGINAL LOGIC)
+   🛍️ 5. SHOW ALL PRODUCTS (PATCHED)
+===================================================== */
+let resultCount = document.querySelector(".woocommerce-result-count");
+let allProducts = [];
+
+function refreshAllProducts() {
+    const container = getProductContainer();
+    if (container) allProducts = Array.from(container.children);
+}
+
+refreshAllProducts();
+
+function addShowAllButton() {
+    if (document.querySelector(".custom-show-all-btn")) return;
+    if (!resultCount) return;
+
+    const btn = document.createElement("button");
+    btn.textContent = "Show All Products";
+    btn.className = "custom-show-all-btn";
+    resultCount.parentNode.insertBefore(btn, resultCount);
+
+    btn.addEventListener("click", () => {
+        const container = getProductContainer();
+        if (!container) return;
+
+        refreshAllProducts();
+        container.innerHTML = "";
+        allProducts.forEach(p => container.appendChild(p));
+
+        resultCount.textContent = `Showing all ${allProducts.length} products`;
+        if (shopTitle) shopTitle.textContent = "My Shop";
+    });
+}
+
+new MutationObserver(addShowAllButton)
+.observe(document.body, { childList: true, subtree: true });
+
+/* =====================================================
+   ⚡ 6. AJAX FILTER (ORIGINAL + SAFE)
 ===================================================== */
 let cache = {};
 let xhr, debounce;
@@ -98,8 +139,9 @@ function updateProducts(html, cat) {
     const container = getProductContainer();
     if (!container) return;
 
-    container.innerHTML = html || '<div>No products found</div>';
+    container.innerHTML = html || '<div>No products available</div>';
     cache[cat] = html;
+    refreshAllProducts();
 }
 
 function filterProducts(category = "") {
@@ -125,7 +167,7 @@ function filterProducts(category = "") {
 setTimeout(() => filterProducts(), 10);
 
 /* =====================================================
-   🎯 5. CARD CLICK (CATEGORY + TITLE + FILTER)
+   🎯 🔧 PATCH 2: CARD CLICK (EVENT DELEGATION)
 ===================================================== */
 document.addEventListener("click", function (e) {
     const card = e.target.closest(".carousel-card");
@@ -134,16 +176,10 @@ document.addEventListener("click", function (e) {
     document.querySelectorAll(".carousel-card").forEach(c => c.classList.remove("active"));
     card.classList.add("active");
 
-    // FILTER
     filterProducts(card.id);
 
-    // TITLE CHANGE
-    const caption = card.querySelector(
-        ".elementor-image-box-description, figcaption, .elementor-image-caption"
-    );
-    if (caption && shopTitle) {
-        shopTitle.textContent = caption.innerText.trim();
-    }
+    const caption = card.querySelector(".elementor-image-box-description, figcaption, .elementor-image-caption");
+    if (caption && shopTitle) shopTitle.textContent = caption.innerText.trim();
 });
 
 });
