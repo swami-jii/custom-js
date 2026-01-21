@@ -84,32 +84,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
     
-    /* ----------------------------------
-   LOOP GRID FILTER BY CATEGORY
----------------------------------- */
-
-const loopItems = document.querySelectorAll(
-    ".elementor-loop-item.product"
-);
-
-document.querySelectorAll(".carousel-card").forEach(card => {
-
-    card.addEventListener("click", function () {
-
-        const cat = card.getAttribute("data-cat"); 
-        if (!cat) return;
-
-        // Divider text already change ho raha hai
-        // Ab niche products filter honge
-
-        loopItems.forEach(item => {
-            item.style.display = "none";
-
-            if (item.classList.contains("product_cat-" + cat)) {
-                item.style.display = "block";
-            }
-        });
-
-    });
-
-});
