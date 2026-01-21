@@ -84,58 +84,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
     
-document.addEventListener("DOMContentLoaded", function () {
+    /* ----------------------------------
+   LOOP GRID FILTER BY CATEGORY
+---------------------------------- */
 
-  const productWrap = document.querySelector(
-    ".elementor-widget-wc-archive-products .products"
-  );
-  if (!productWrap) return;
+const loopItems = document.querySelectorAll(
+    ".elementor-loop-item.product"
+);
 
-  let xhr;
-  let cache = {};
+document.querySelectorAll(".carousel-card").forEach(card => {
 
-  function loadCategory(cat) {
-    if (cache[cat]) {
-      productWrap.innerHTML = cache[cat];
-      return;
-    }
-
-    if (xhr) xhr.abort();
-    xhr = new XMLHttpRequest();
-
-    const url =
-      window.location.pathname +
-      (cat ? "?product_cat=" + cat : "");
-
-    xhr.open("GET", url, true);
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        const doc = new DOMParser().parseFromString(
-          xhr.responseText,
-          "text/html"
-        );
-        const newProducts = doc.querySelector(".products");
-        if (newProducts) {
-          cache[cat] = newProducts.innerHTML;
-          productWrap.innerHTML = newProducts.innerHTML;
-        }
-      }
-    };
-    xhr.send();
-  }
-
-  // 🔥 CARD CLICK → FILTER
-  document.querySelectorAll(".carousel-card").forEach(card => {
     card.addEventListener("click", function () {
 
-      document
-        .querySelectorAll(".carousel-card")
-        .forEach(c => c.classList.remove("active"));
-      this.classList.add("active");
+        const cat = card.getAttribute("data-cat"); 
+        if (!cat) return;
 
-      const cat = this.dataset.cat || "";
-      loadCategory(cat);
+        // Divider text already change ho raha hai
+        // Ab niche products filter honge
+
+        loopItems.forEach(item => {
+            item.style.display = "none";
+
+            if (item.classList.contains("product_cat-" + cat)) {
+                item.style.display = "block";
+            }
+        });
+
     });
-  });
 
 });
