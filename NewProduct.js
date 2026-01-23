@@ -201,34 +201,3 @@
     }
 
     manageCartHeadings();
-    jQuery(document.body).on("updated_wc_div", function() {
-        setTimeout(manageCartHeadings, 500);
-    });
-
-    var cartForm = document.querySelector(".woocommerce-cart-form");
-    if (cartForm) {
-        var cartObserver = new MutationObserver(function(mutationsList) {
-            for (var mutation of mutationsList) {
-                if (mutation.type === "childList") {
-                    manageCartHeadings();
-                }
-            }
-        });
-        cartObserver.observe(cartForm, { childList: true, subtree: true });
-    }
-
-    var accountPage = document.querySelector(".woocommerce");
-    if (accountPage) {
-        accountPage.querySelectorAll(".u-columns h2").forEach(function (heading) {
-            var newHeading = document.createElement("h3");
-            newHeading.innerHTML = heading.innerHTML;
-            heading.replaceWith(newHeading);
-        });
-
-        accountPage.querySelectorAll(".woocommerce-Tabs-panel h2").forEach(function (heading) {
-            var newHeading = document.createElement("h6");
-            newHeading.innerHTML = heading.innerHTML;
-            heading.replaceWith(newHeading);
-        });
-    }
-});
