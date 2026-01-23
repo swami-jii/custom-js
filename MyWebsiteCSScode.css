@@ -384,40 +384,6 @@
   }
 }
 
-/* Sirf eye button ka design reset karega */
-button.show-password-input {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-    color: inherit !important;
-    cursor: pointer !important;
-}
-
-/* Eye button ke hover effect ko disable karega */
-button.show-password-input:hover {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* Eye button ke ::after pseudo-element ko sahi karega */
-button.show-password-input::after {
-    content: "👁️" !important;
-    font-size: 16px !important;
-    color: #555 !important;
-    display: inline-block !important;
-}
-	button.show-password-input::before {
-    display: none !important;
-}
-
-/* Baaki WooCommerce buttons par styling apply hoti rahe */
-.woocommerce-MyAccount-content button {
-    color: #fff !important;
-    border-radius: 5px !important;
-}
-
 /* ========== RESPONSIVE STYLES ========== */
 /* Tablet (768px - 1024px) */
 @media (max-width: 1024px) {
