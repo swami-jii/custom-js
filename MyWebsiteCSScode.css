@@ -435,3 +435,176 @@
         width: 4px;
     }
 }
+/* legal-pages */
+	
+    .legal-pages h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .legal-pages h3 {
+      font-size: 1.2em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .legal-pages ul {
+      padding-left: 0;
+    }
+    
+    .legal-pages h6 {
+      font-size: 1.1em;
+    } 
+    
+    .legal-pages ul, li{
+        margin-bottom: 15px;
+        margin-bottom: 8px;
+        } 
+        
+    .legal-pages a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    .legal-pages a:hover {
+      text-decoration: none;
+    }
+    
+    .last-updated {
+      font-size: 0.9em;
+      color: #777;
+      margin-bottom: 30px;
+    }
+
+    /* Mobile Friendly Adjustments */
+    @media (max-width: 768px) {
+        .legal-pages h1 {
+            font-size: 2em !important;
+        }
+
+        .legal-pages h3 {
+            font-size: 1.3em !important;
+        }
+        
+        .legal-pages h6{
+      font-size: 1em !important;
+    } 
+ 
+        .legal-pages ul, li{
+            margin-left: 12px;
+            margin-bottom: 8px;
+        } 
+        
+        .last-updated {
+            font-size: 0.85em !important;
+        }
+    }
+
+    /* Extra Small Screens (Phones < 480px) */
+    @media (max-width: 480px) {
+        .legal-pages h1 {
+            font-size: 1.6em;
+        }
+
+        .legal-pages h3 {
+            font-size: 1.1em !important;
+        }
+        
+        .legal-pages h6{
+      font-size: 1em !important;
+    } 
+        
+        .legal-pages ul, li{
+            margin-left: 12px;
+            margin-bottom: 8px;
+        } 
+    }
+	
+	/* table content */
+	.elementor-toc__list-item-text-wrapper::before {
+    content: "" !important;
+    display: none !important;
+}
+
+.elementor-toc__list-wrapper {
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+    text-align: left !important;
+}
+
+.elementor-toc__list-item-text-wrapper {
+    padding-left: 10px !important; /* Thoda left shift adjust karne ke liye */
+	  margin-top: 10px !important;
+    padding-right: 0px !important;
+    text-align: left !important;
+    display: block !important;
+}
+
+.elementor-toc__list {
+    list-style: none !important;
+    padding-left: 0px !important;
+}
+
+/* Scroll completely disable aur full height enable */
+.elementor-toc__body {
+    max-height: none !important;
+    overflow-y: visible !important;
+}
+
+/* Headings wrap hone ke liye */
+.elementor-toc__list-item {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    display: block !important;
+    text-align: left !important;
+}
+
+/* List item ke andar jo anchor (link) hai uska overflow fix */
+.elementor-toc__list-item a {
+    display: inline-block !important;
+    max-width: 100% !important;
+    word-break: break-word !important;
+    white-space: normal !important; /* Yeh ensure karega ki text wrap ho */
+}
+
+/*--------------------*/
+@media (max-width: 768px) {
+	
+	.our-featured,
+	.legal-pages {
+		width: 105.5% !important;
+		max-width: 150% !important;
+	}
+	
+	.table-of-content {
+		max-width: 150% !important;
+    width: 102.5% !important;
+		margin-bottom: 20px !important;
+	}
+	
+.custom-toc-toggle {
+    background: #12837B;
+    border: none;
+    color: #ffffff;
+    border-radius: 5px;
+    margin-left: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+	  margin-top: 10px;
+}
+
+/* 🔹 Hover & Active Color */
+.custom-toc-header:hover,
+.custom-toc-active .custom-toc-header {
+    background: #D4A017 !important;
+}
+
+/* 🔹 Dropdown Button Hover & Active Color */
+.custom-toc-toggle:hover,
+.custom-toc-active .custom-toc-toggle {
+    color: #ffffff !important;
+    background: #D4A017 !important;
+}
+
+}
