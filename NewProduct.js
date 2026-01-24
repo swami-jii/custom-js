@@ -1,5 +1,5 @@
-/* ---------- Performance-safe Mobile Detection ---------- */
-var isMobile = window.innerWidth <= 768;
+/* ---------- GLOBAL & SAFE MOBILE DETECTION ---------- */
+window.isMobile = window.innerWidth <= 768;
 
 /* ---------- Fixed Cart Popup with working emoji effects ---------- */
 var popupExists = false;
@@ -31,7 +31,7 @@ function showCartPopup() {
         createEmojiEffect(popup);
     }, 50);
 
-    /* ---------- Audio (safe & non-blocking) ---------- */
+    /* ---------- Audio (non-blocking & safe) ---------- */
     try {
         var sound = new Audio("https://careersupport1.com/wp-content/uploads/2025/03/poper-party-2.mp3");
         sound.volume = 1;
@@ -69,7 +69,8 @@ function createPartyBlasterEffect(popup) {
         var y = dist * Math.sin(angle);
 
         setTimeout(function (el, x, y) {
-            el.style.transform = "translate(" + x + "px," + y + "px) rotate(" + Math.random() * 360 + "deg)";
+            el.style.transform =
+                "translate(" + x + "px," + y + "px) rotate(" + Math.random() * 360 + "deg)";
             el.style.opacity = "0";
         }.bind(null, popper, x, y), 30);
 
@@ -97,7 +98,9 @@ function createEmojiEffect(popup) {
         document.body.appendChild(emoji);
 
         setTimeout(function (el) {
-            el.style.transform = "translateY(-" + (50 + Math.random() * 50) + "px) rotate(" + Math.random() * 360 + "deg)";
+            el.style.transform =
+                "translateY(-" + (50 + Math.random() * 50) +
+                "px) rotate(" + Math.random() * 360 + "deg)";
             el.style.opacity = "0";
         }.bind(null, emoji), 30);
 
@@ -107,7 +110,7 @@ function createEmojiEffect(popup) {
     }
 }
 
-/* ---------- Cart Update Listener (single bind) ---------- */
+/* ---------- Cart Update Listener (single bind only) ---------- */
 document.addEventListener("click", function (e) {
     if (e.target && e.target.name === "update_cart") {
         cartUpdated = true;
@@ -126,7 +129,7 @@ document.addEventListener("click", function (e) {
     }
 });
 
-/* ---------- Cart Headings Manager (unchanged logic, optimized DOM) ---------- */
+/* ---------- Cart Headings Manager (unchanged output) ---------- */
 function manageCartHeadings() {
     var cartTotalsHeading = document.querySelector(".cart_totals h2");
     if (cartTotalsHeading) {
@@ -153,7 +156,7 @@ function manageCartHeadings() {
         coupon.insertBefore(ch, coupon.firstChild);
     }
 
-    if (isMobile) {
+    if (window.isMobile) {
         document.querySelectorAll(".product-remove").forEach(function (btn) {
             var link = btn.querySelector("a");
             if (link && !btn.querySelector(".custom-cancel-btn")) {
