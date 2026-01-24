@@ -1,5 +1,5 @@
 /* =====================================================
-   ABSOLUTE FIX – DO NOT TOUCH
+   ABSOLUTE SAFETY FIX (CDN + CACHE PROOF)
    ===================================================== */
 var isMobile = false;
 try {
@@ -26,11 +26,10 @@ function showCartPopup() {
 
     var popup = document.createElement("div");
     popup.className = "cart-popup";
-    popup.innerHTML = `
-        <h2>🎉 Woohoo! Cart Updated 😊</h2>
-        <p>Your cart has been successfully updated! Happy shopping! 🛍️</p>
-        <button class="close-popup">Close</button>
-    `;
+    popup.innerHTML =
+        '<h2>🎉 Woohoo! Cart Updated 😊</h2>' +
+        '<p>Your cart has been successfully updated! Happy shopping! 🛍️</p>' +
+        '<button class="close-popup">Close</button>';
 
     popupWrapper.appendChild(popup);
     document.body.appendChild(popupWrapper);
