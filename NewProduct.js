@@ -1,7 +1,17 @@
-/* ---------- GLOBAL & SAFE MOBILE DETECTION ---------- */
-window.isMobile = window.innerWidth <= 768;
+/* =====================================================
+   GLOBAL SAFETY FIX (DO NOT REMOVE)
+   ===================================================== */
+(function () {
+    if (typeof window.isMobile === "undefined") {
+        window.isMobile =
+            window.matchMedia &&
+            window.matchMedia("(max-width: 768px)").matches;
+    }
+})();
 
-/* ---------- Fixed Cart Popup with working emoji effects ---------- */
+/* =====================================================
+   Fixed Cart Popup with working emoji effects
+   ===================================================== */
 var popupExists = false;
 var cartUpdated = false;
 var cartEventBound = false;
@@ -31,7 +41,6 @@ function showCartPopup() {
         createEmojiEffect(popup);
     }, 50);
 
-    /* ---------- Audio (non-blocking & safe) ---------- */
     try {
         var sound = new Audio("https://careersupport1.com/wp-content/uploads/2025/03/poper-party-2.mp3");
         sound.volume = 1;
@@ -46,71 +55,69 @@ function showCartPopup() {
     });
 }
 
-/* ---------- Party Blaster Effect (optimized) ---------- */
+/* ---------- Party Blaster ---------- */
 function createPartyBlasterEffect(popup) {
     if (!popup) return;
 
-    var rect = popup.getBoundingClientRect();
-    var cx = rect.left + rect.width / 2;
-    var cy = rect.top + rect.height / 2;
+    var r = popup.getBoundingClientRect();
+    var cx = r.left + r.width / 2;
+    var cy = r.top + r.height / 2;
 
     for (var i = 0; i < 15; i++) {
-        var popper = document.createElement("div");
-        popper.textContent = "🎉";
-        popper.style.cssText =
-            "position:fixed;left:" + cx + "px;top:" + cy + "px;font-size:30px;z-index:9999;" +
-            "transition:transform 1.5s ease-out,opacity 1.5s;pointer-events:none";
+        var el = document.createElement("div");
+        el.textContent = "🎉";
+        el.style.cssText =
+            "position:fixed;left:" + cx + "px;top:" + cy +
+            "px;font-size:30px;z-index:9999;pointer-events:none;" +
+            "transition:transform 1.5s ease-out,opacity 1.5s";
 
-        document.body.appendChild(popper);
+        document.body.appendChild(el);
 
-        var angle = (i / 15) * Math.PI * 2;
-        var dist = Math.random() * 150 + 100;
-        var x = dist * Math.cos(angle);
-        var y = dist * Math.sin(angle);
+        var a = (i / 15) * Math.PI * 2;
+        var d = Math.random() * 150 + 100;
 
-        setTimeout(function (el, x, y) {
-            el.style.transform =
-                "translate(" + x + "px," + y + "px) rotate(" + Math.random() * 360 + "deg)";
-            el.style.opacity = "0";
-        }.bind(null, popper, x, y), 30);
+        setTimeout(function (e, x, y) {
+            e.style.transform =
+                "translate(" + x + "px," + y + "px) rotate(360deg)";
+            e.style.opacity = "0";
+        }.bind(null, el, Math.cos(a) * d, Math.sin(a) * d), 30);
 
-        setTimeout(function (el) {
-            el.remove();
-        }.bind(null, popper), 1800);
+        setTimeout(function (e) {
+            e.remove();
+        }.bind(null, el), 1800);
     }
 }
 
-/* ---------- Emoji Effect (optimized) ---------- */
+/* ---------- Emoji Effect ---------- */
 function createEmojiEffect(popup) {
     if (!popup) return;
 
-    var rect = popup.getBoundingClientRect();
+    var r = popup.getBoundingClientRect();
     var emojis = ["😃", "😂", "😆", "😁", "😍", "🥳", "🤩"];
 
     for (var i = 0; i < 20; i++) {
-        var emoji = document.createElement("div");
-        emoji.textContent = emojis[(Math.random() * emojis.length) | 0];
-        emoji.style.cssText =
-            "position:fixed;left:" + (rect.left + Math.random() * rect.width) +
-            "px;top:" + (rect.top + Math.random() * rect.height) +
-            "px;font-size:25px;z-index:9999;transition:transform 1s ease-out,opacity 1s;pointer-events:none";
+        var e = document.createElement("div");
+        e.textContent = emojis[(Math.random() * emojis.length) | 0];
+        e.style.cssText =
+            "position:fixed;left:" + (r.left + Math.random() * r.width) +
+            "px;top:" + (r.top + Math.random() * r.height) +
+            "px;font-size:25px;z-index:9999;pointer-events:none;" +
+            "transition:transform 1s ease-out,opacity 1s";
 
-        document.body.appendChild(emoji);
+        document.body.appendChild(e);
 
         setTimeout(function (el) {
-            el.style.transform =
-                "translateY(-" + (50 + Math.random() * 50) +
-                "px) rotate(" + Math.random() * 360 + "deg)";
+            el.style.transform = "translateY(-80px) rotate(360deg)";
             el.style.opacity = "0";
-        }.bind(null, emoji), 30);
+        }.bind(null, e), 30);
 
         setTimeout(function (el) {
             el.remove();
-        }.bind(null, emoji), 1200);
+        }.bind(null, e), 1200);
     }
 }
 
-/* ---------- Cart Update Listener (single bind only) ---------- */
+/* ---------- Cart Listener ---------- */
 document.addEventListener("click", function (e) {
     if (e.target && e.target.name === "update_cart") {
         cartUpdated = true;
@@ -119,43 +126,13 @@ document.addEventListener("click", function (e) {
             cartEventBound = true;
             jQuery(document.body).on("updated_cart_totals", function () {
                 showCartPopup();
-                setTimeout(function () {
-                    document.querySelectorAll(".woocommerce-message").forEach(function (el) {
-                        el.style.display = "none";
-                    });
-                }, 300);
             });
         }
     }
 });
 
-/* ---------- Cart Headings Manager (unchanged output) ---------- */
+/* ---------- Cart Headings ---------- */
 function manageCartHeadings() {
-    var cartTotalsHeading = document.querySelector(".cart_totals h2");
-    if (cartTotalsHeading) {
-        var h3 = document.createElement("h3");
-        h3.innerHTML = cartTotalsHeading.innerHTML;
-        h3.className = cartTotalsHeading.className;
-        cartTotalsHeading.replaceWith(h3);
-    }
-
-    var table = document.querySelector(".woocommerce-cart-form table.shop_table");
-    if (table && !document.querySelector(".your-cart-heading")) {
-        var ph = document.createElement("h3");
-        ph.textContent = "YOUR CART";
-        ph.className = "your-cart-heading";
-        table.parentNode.insertBefore(ph, table);
-    }
-
-    var coupon = document.querySelector(".woocommerce-cart-form .coupon");
-    if (coupon && !document.querySelector(".apply-coupon-heading")) {
-        var ch = document.createElement("h3");
-        ch.textContent = "APPLY COUPON";
-        ch.className = "apply-coupon-heading";
-        ch.style.marginBottom = "20px";
-        coupon.insertBefore(ch, coupon.firstChild);
-    }
-
     if (window.isMobile) {
         document.querySelectorAll(".product-remove").forEach(function (btn) {
             var link = btn.querySelector("a");
