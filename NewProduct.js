@@ -1,13 +1,12 @@
 /* =====================================================
-   GLOBAL SAFETY FIX (DO NOT REMOVE)
+   ABSOLUTE FIX – DO NOT TOUCH
    ===================================================== */
-(function () {
-    if (typeof window.isMobile === "undefined") {
-        window.isMobile =
-            window.matchMedia &&
-            window.matchMedia("(max-width: 768px)").matches;
-    }
-})();
+var isMobile = false;
+try {
+    isMobile = window.matchMedia("(max-width: 768px)").matches;
+} catch (e) {
+    isMobile = window.innerWidth <= 768;
+}
 
 /* =====================================================
    Fixed Cart Popup with working emoji effects
@@ -47,12 +46,12 @@ function showCartPopup() {
         sound.play().catch(function () {});
     } catch (e) {}
 
-    popup.querySelector(".close-popup").addEventListener("click", function () {
+    popup.querySelector(".close-popup").onclick = function () {
         popupWrapper.remove();
         document.body.classList.remove("popup-active");
         popupExists = false;
         cartUpdated = false;
-    });
+    };
 }
 
 /* ---------- Party Blaster ---------- */
@@ -76,15 +75,19 @@ function createPartyBlasterEffect(popup) {
         var a = (i / 15) * Math.PI * 2;
         var d = Math.random() * 150 + 100;
 
-        setTimeout(function (e, x, y) {
-            e.style.transform =
-                "translate(" + x + "px," + y + "px) rotate(360deg)";
-            e.style.opacity = "0";
-        }.bind(null, el, Math.cos(a) * d, Math.sin(a) * d), 30);
+        setTimeout((function (e, x, y) {
+            return function () {
+                e.style.transform =
+                    "translate(" + x + "px," + y + "px) rotate(360deg)";
+                e.style.opacity = "0";
+            };
+        })(el, Math.cos(a) * d, Math.sin(a) * d), 30);
 
-        setTimeout(function (e) {
-            e.remove();
-        }.bind(null, el), 1800);
+        setTimeout((function (e) {
+            return function () {
+                e.remove();
+            };
+        })(el), 1800);
     }
 }
 
@@ -97,7 +100,7 @@ function createEmojiEffect(popup) {
 
     for (var i = 0; i < 20; i++) {
         var e = document.createElement("div");
-        e.textContent = emojis[(Math.random() * emojis.length) | 0];
+        e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
         e.style.cssText =
             "position:fixed;left:" + (r.left + Math.random() * r.width) +
             "px;top:" + (r.top + Math.random() * r.height) +
@@ -106,14 +109,18 @@ function createEmojiEffect(popup) {
 
         document.body.appendChild(e);
 
-        setTimeout(function (el) {
-            el.style.transform = "translateY(-80px) rotate(360deg)";
-            el.style.opacity = "0";
-        }.bind(null, e), 30);
+        setTimeout((function (el) {
+            return function () {
+                el.style.transform = "translateY(-80px) rotate(360deg)";
+                el.style.opacity = "0";
+            };
+        })(e), 30);
 
-        setTimeout(function (el) {
-            el.remove();
-        }.bind(null, e), 1200);
+        setTimeout((function (el) {
+            return function () {
+                el.remove();
+            };
+        })(e), 1200);
     }
 }
 
@@ -133,7 +140,7 @@ document.addEventListener("click", function (e) {
 
 /* ---------- Cart Headings ---------- */
 function manageCartHeadings() {
-    if (window.isMobile) {
+    if (isMobile) {
         document.querySelectorAll(".product-remove").forEach(function (btn) {
             var link = btn.querySelector("a");
             if (link && !btn.querySelector(".custom-cancel-btn")) {
