@@ -369,72 +369,6 @@
 .carousel-btn.right {
     right: 0;
 }
-	
-@media (max-width: 768px) {
-  .carousel-wrapper.expanded .carousel-card {
-    flex: 1 1 calc(33.33% - 12px); /* 3 cards per row */
-    margin-bottom: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-wrapper.expanded .carousel-card {
-    flex: 1 1 calc(33.33% - 10px);
-    margin-bottom: 10px;
-  }
-}
-
-/* ========== RESPONSIVE STYLES ========== */
-/* Tablet (768px - 1024px) */
-@media (max-width: 1024px) {
-    .filter-wrapper {
-        padding: 10px 0 10px 0;
-        margin: 0 0 0 0;
-    }
-    
-    .scroll-btn {
-        display: none !important;
-    }
-    
-    #sub-category-buttons {
-        max-height: 280px;
-        padding-right: 15px;
-        margin-right: -60px;
-    }
-
-    #sub-category-buttons::-webkit-scrollbar {
-        width: 5px;
-    }
-}
-
-/* Mobile (up to 767px) */
-@media (max-width: 767px) {
-    .search-box {
-        padding: 5px;
-    }
-
-    .search-box input {
-        font-size: 14px;
-        padding: 5px;
-    }
-
-    .search-box .search-icon {
-        font-size: 18px;
-        padding: 5px;
-    }
-	
-/* Small Mobile (up to 480px) */
-@media (max-width: 480px) {
-    #sub-category-buttons {
-        max-height: 280px;
-        padding-right: 20px;
-        margin-right: -40px;
-    }
-   
-    #sub-category-buttons::-webkit-scrollbar {
-        width: 4px;
-    }
-}
 
 /* ========== MY ACCOUNT STYLES ========== */
 .woocommerce-MyAccount-navigation {
@@ -762,4 +696,70 @@ form.woocommerce-EditAccountForm.edit-account {
     box-shadow: none !important;
     padding: 0 !important;
     border: none !important;
+}
+	
+@media (max-width: 768px) {
+  .carousel-wrapper.expanded .carousel-card {
+    flex: 1 1 calc(33.33% - 12px); /* 3 cards per row */
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-wrapper.expanded .carousel-card {
+    flex: 1 1 calc(33.33% - 10px);
+    margin-bottom: 10px;
+  }
+}
+
+/* ========== RESPONSIVE STYLES ========== */
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .filter-wrapper {
+        padding: 10px 0 10px 0;
+        margin: 0 0 0 0;
+    }
+    
+    .scroll-btn {
+        display: none !important;
+    }
+    
+    #sub-category-buttons {
+        max-height: 280px;
+        padding-right: 15px;
+        margin-right: -60px;
+    }
+
+    #sub-category-buttons::-webkit-scrollbar {
+        width: 5px;
+    }
+}
+
+/* Mobile (up to 767px) */
+@media (max-width: 767px) {
+    .search-box {
+        padding: 5px;
+    }
+
+    .search-box input {
+        font-size: 14px;
+        padding: 5px;
+    }
+
+    .search-box .search-icon {
+        font-size: 18px;
+        padding: 5px;
+    }
+	
+/* Small Mobile (up to 480px) */
+@media (max-width: 480px) {
+    #sub-category-buttons {
+        max-height: 280px;
+        padding-right: 20px;
+        margin-right: -40px;
+    }
+   
+    #sub-category-buttons::-webkit-scrollbar {
+        width: 4px;
+    }
 }
