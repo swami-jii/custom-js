@@ -355,7 +355,7 @@
 }
 
 .carousel-card.active {
-    transform: scale(1.03);
+    transform: scale(1.1);
 }
 
 .carousel-card:hover {
