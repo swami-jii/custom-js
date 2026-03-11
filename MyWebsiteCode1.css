@@ -355,11 +355,11 @@
 }
 
 .carousel-card.active {
-    transform: scale(1.1);
+    transform: scale(.03);
 }
 
 .carousel-card:hover {
-    transform: scale(1.03);
+    transform: scale(.03);
 }
 
 .carousel-btn.left {
