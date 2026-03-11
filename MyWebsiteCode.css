@@ -343,7 +343,14 @@
 .carousel-wrapper::-webkit-scrollbar {
     display: none;
 }
+.carousel-card {
+    cursor: pointer !important;
+    transition: transform 0.3s ease !important;
+}
 
+.carousel-card:hover {
+    transform: scale(1.015) !important;
+}
 .carousel-btn {
     cursor: pointer;
 }
